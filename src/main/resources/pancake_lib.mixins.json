@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.pancake.pancake_lib.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "pancake_lib.refmap.json",
   "mixins": [
   ],
