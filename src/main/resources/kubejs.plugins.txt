@@ -1,1 +1,1 @@
-com.pancake.pancake_lib.compat.kubejs.ModKubeJSPlugin
+cn.teampancake.pancakelib.compat.kubejs.ModKubeJSPlugin
