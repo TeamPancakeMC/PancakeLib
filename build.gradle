@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'idea'
+    id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
@@ -240,6 +241,29 @@ tasks.named('jar', Jar).configure {
 
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
+}
+def commitHash = 'git rev-parse HEAD'.execute().text.trim()
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication.class) {
+            groupId = group
+            artifactId = mod_id
+            version = "${mod_version}-" + commitHash?.substring(0, 8)+"-SNAPSHOT"
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url 'http://rm.fubuki.vip:8081/repository/maven-snapshots/'
+            allowInsecureProtocol = true
+            name = 'maven'
+            credentials (PasswordCredentials.class)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
