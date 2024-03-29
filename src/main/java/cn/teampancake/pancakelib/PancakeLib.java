@@ -11,6 +11,8 @@ import cn.teampancake.pancakelib.compat.curios.event.subscriber.CurioPlayerEvent
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,12 +29,17 @@ import org.slf4j.Logger;
 public class PancakeLib {
     public static final String MOD_ID = "pancake_lib";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static boolean CURIOS_LOADED;
 
 
     public PancakeLib() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onFMLCommonSetup);
-        modEventBus.addListener(this::onRegisterClientTooltipComponentFactories);
+
+        if(FMLEnvironment.dist.isClient()){
+            modEventBus.addListener(this::onRegisterClientTooltipComponentFactories);
+        }
+
         ModModifiers.MODIFIER.register(modEventBus);
         ModEquipmentSet.EQUIPMENT_SET.register(modEventBus);
 
@@ -47,6 +54,7 @@ public class PancakeLib {
         }
 
         if (ModList.get().isLoaded("curios")){
+            CURIOS_LOADED=true;
             MinecraftForge.EVENT_BUS.register(CurioPlayerEventSubscriber.class);
         }
     }
@@ -65,6 +73,7 @@ public class PancakeLib {
         return ResourceKey.createRegistryKey(asResource(name));
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRegisterClientTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(EquipmentSetTooltipComponent.class, equipmentSetTooltipComponent -> equipmentSetTooltipComponent);

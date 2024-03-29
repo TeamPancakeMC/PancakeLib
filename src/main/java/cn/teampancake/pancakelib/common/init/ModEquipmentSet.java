@@ -27,11 +27,7 @@ public class ModEquipmentSet {
     public static void setup() {
         ModEquipmentSet.EQUIPMENT_SET_REGISTRY.get().getEntries().stream()
                 .map(Map.Entry::getValue)
-                .forEach((set) -> {
-                    set.getGroup().getEquipages().forEach((equippable,ingredient) -> {
-                        ModEquipmentSet.EQUIPMENT_SET_MAP.put(ingredient, set);
-                    });
-                });
+                .forEach((set) -> set.getGroup().getEquipages().forEach((equippable, ingredient) -> ModEquipmentSet.EQUIPMENT_SET_MAP.put(ingredient, set)));
     }
 
 }

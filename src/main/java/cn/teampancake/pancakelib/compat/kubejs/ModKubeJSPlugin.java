@@ -1,5 +1,6 @@
 package cn.teampancake.pancakelib.compat.kubejs;
 
+import cn.teampancake.pancakelib.PancakeLib;
 import cn.teampancake.pancakelib.api.IEquipmentSet;
 import cn.teampancake.pancakelib.api.IModifier;
 import cn.teampancake.pancakelib.common.equipment_set.EquipmentSetHelper;
@@ -26,7 +27,9 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
         event.add("ModEquipmentSet",ModEquipmentSet.class);
         event.add("EquipmentSetHelper", EquipmentSetHelper.class);
         event.add("VanillaIEquippable", VanillaIEquippable.class);
-        event.add("CurioEquippable", CurioEquippable.class);
+        if(PancakeLib.CURIOS_LOADED){
+            event.add("CurioEquippable", CurioEquippable.class);
+        }
     }
 
     @Override
