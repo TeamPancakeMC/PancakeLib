@@ -2,10 +2,12 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
@@ -17,6 +19,7 @@ plugins {
 }
 
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 group = mod_group_id
 version = mod_version
@@ -43,7 +46,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: mapping_channel, version: mapping_version
+    mappings channel: 'parchment', version: '2023.06.26-1.20.1'
 
     // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
     // enableEclipsePrepareRuns = true
@@ -245,11 +248,11 @@ tasks.named('jar', Jar).configure {
 
 publishing {
     publications {
-        register("mavenJava", MavenPublication.class) {
-            groupId = group
-            artifactId = mod_id
-            version = "${mod_version}"
+        mavenJava(MavenPublication) {
+            artifactId = archivesBaseName
+
             from components.java
+            fg.component(it)
         }
     }
     repositories {
@@ -273,4 +276,3 @@ reobf {
 }
 
 tasks.jarJar.finalizedBy('reobfJarJar')
-
